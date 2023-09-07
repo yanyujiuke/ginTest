@@ -14,15 +14,6 @@ type LoginController struct {
 }
 
 func (con LoginController) Login(c *gin.Context) {
-	// // 获取登陆的session数据
-	// session := sessions.Default(c)
-	// managerinfo := session.Get("managerinfo")
-	// // 类型断言来判断managerinfo是不是一个string
-	// managerinfoStr, ok := managerinfo.(string)
-	// if ok {
-	// 	var managerStruct []models.Manager
-	// 	json.Unmarshal([]byte(managerinfoStr), &managerStruct)
-	// }
 	c.HTML(http.StatusOK, "admin/login/login.html", gin.H{})
 }
 
