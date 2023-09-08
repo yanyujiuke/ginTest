@@ -81,7 +81,36 @@ func (con MainController) ChangeStatus(c *gin.Context) {
 	err = models.DB.Exec("update "+table+" set "+field+" = ABS("+field+" - 1) where id = ?", id).Error
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
-			"success": true,
+			"success": false,
+			"message": "修改失败",
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"message": "修改成功",
+	})
+}
+
+// 公共修改排序的方法
+func (con MainController) ChangeNum(c *gin.Context) {
+	id, err := models.Int(c.Query("id"))
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"success": false,
+			"message": "传入的参数错误",
+		})
+		return
+	}
+
+	table := c.Query("table")
+	field := c.Query("field")
+	num := c.Query("num")
+
+	err = models.DB.Exec("update "+table+" set "+field+" = "+num+" where id = ?", id).Error
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"success": false,
 			"message": "修改失败",
 		})
 		return

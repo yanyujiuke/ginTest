@@ -22,6 +22,7 @@ func AdminRoutersInit(r *gin.Engine) {
 		adminRouters.GET("/index", admin.MainController{}.Index)
 		adminRouters.GET("/welcome", admin.MainController{}.Welcome)
 		adminRouters.GET("/changeStatus", admin.MainController{}.ChangeStatus)
+		adminRouters.GET("/changeNum", admin.MainController{}.ChangeNum)
 
 		adminRouters.GET("/login", admin.LoginController{}.Login)
 		adminRouters.GET("/captcha", admin.LoginController{}.Captcha)

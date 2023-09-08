@@ -53,7 +53,9 @@
                 {{ end }}
             </td>
             <td>{{ $v.Link }}</td>
-            <td>{{ $v.Sort }}</td>
+            <td>
+                <span class="chSpanNum" data-id="{{ $v.Id }}" data-table="focus" data-field="sort">{{ $v.Sort }}</span>
+            </td>
             <td align="center">
                 {{ if eq $v.Status 1 }}
                 <img src="/static/admin/images/yes.gif" class="chStatus" data-id="{{ $v.Id }}" data-table="focus" data-field="status"/>
