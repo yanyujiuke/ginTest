@@ -4,11 +4,14 @@ import (
 	"encoding/json"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"net/http"
 	"shop/models"
 )
 
-type MainController struct{}
+type MainController struct {
+	BaseController
+}
 
 func (con MainController) Index(c *gin.Context) {
 	// 获取用户登陆的session信息
@@ -23,7 +26,9 @@ func (con MainController) Index(c *gin.Context) {
 
 		// 2 获取所有的权限
 		accessList := []models.Access{}
-		models.DB.Where("module_id=?", 0).Preload("AccessItem").Find(&accessList)
+		models.DB.Where("module_id=?", 0).Preload("AccessItem", func(db *gorm.DB) *gorm.DB {
+			return db.Order("access.sort desc")
+		}).Order("sort desc").Find(&accessList)
 
 		// 3 获取当前角色所拥有的权限，并把权限id放在一个map对象里面
 		roleAccessList := []models.RoleAccess{}
@@ -57,4 +62,32 @@ func (con MainController) Index(c *gin.Context) {
 
 func (con MainController) Welcome(c *gin.Context) {
 	c.HTML(http.StatusOK, "admin/main/welcome.html", gin.H{})
+}
+
+// 公共修改状态的方法
+func (con MainController) ChangeStatus(c *gin.Context) {
+	id, err := models.Int(c.Query("id"))
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"success": true,
+			"message": "传入的参数错误",
+		})
+		return
+	}
+
+	table := c.Query("table")
+	field := c.Query("field")
+
+	err = models.DB.Exec("update "+table+" set "+field+" = ABS("+field+" - 1) where id = ?", id).Error
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"success": true,
+			"message": "修改失败",
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"message": "修改成功",
+	})
 }

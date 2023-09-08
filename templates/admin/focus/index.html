@@ -56,9 +56,9 @@
             <td>{{ $v.Sort }}</td>
             <td align="center">
                 {{ if eq $v.Status 1 }}
-                <img src="/static/admin/images/yes.gif" />
+                <img src="/static/admin/images/yes.gif" class="chStatus" data-id="{{ $v.Id }}" data-table="focus" data-field="status"/>
                 {{ else }}
-                <img src="/static/admin/images/no.gif" />
+                <img src="/static/admin/images/no.gif" class="chStatus" data-id="{{ $v.Id }}" data-table="focus" data-field="status"/>
                 {{ end }}
             </td>
 <!--            <td>{{ $v.Status }}</td>-->
